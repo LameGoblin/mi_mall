@@ -21,6 +21,7 @@
                     <span class="title">{{item.title}}</span>
                     <i class="iconfont icon-arrowright"></i>
                   </el-menu-item>
+                  <ChildrenList></ChildrenList>
                 </el-menu>
               </div>
             </li>
@@ -45,6 +46,7 @@
 </template>
 
 <script>
+import ChildrenList from '../ChildrenList'
 export default {
   name: 'HeaderContainer',
   data () {
@@ -76,6 +78,7 @@ export default {
       ]
     }
   },
+  components: {ChildrenList},
   methods: {
     handleSelect (index, indexPath) {
       console.log(index + ',' + indexPath)
@@ -151,6 +154,7 @@ export default {
     z-index: 21;
     width: 234px;
     height: 460px;
+    font-size: 14px;
   }
   .site-header .nav-category .site-category .el-menu {
     width: 100%;
