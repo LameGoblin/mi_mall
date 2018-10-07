@@ -1,13 +1,13 @@
 <template>
-  <div class="children">
+  <div class="children" :style="{ width: 248 * colCount + 'px' }">
     <el-row>
-      <el-col v-for="index in colCount" :key="index" :span="6">
+      <el-col v-for="index in colCount" :key="index" :span="24 / colCount">
         <ul>
           <li v-for="item in lists[index-1]" :key="item.id">
-            <a :href="item.url">
+            <router-link :to="item.url">
               <img :src="item.img_url">
               <span>{{item.title}}</span>
-            </a>
+            </router-link>
           </li>
         </ul>
       </el-col>
@@ -24,9 +24,9 @@ export default {
     }
   },
   name: 'ChildrenList',
-  props: ['id'],
+  props: ['cid'],
   mounted () {
-    this.axios.get('http://127.0.0.1:3000/category/list?cid=1')
+    this.axios.get('http://127.0.0.1:3000/category/list?cid=' + this.cid)
       .then(res => {
         if (res.data.code === 1) {
           this.colCount = Math.ceil(res.data.msg.length / 6)
@@ -35,7 +35,6 @@ export default {
             list = res.data.msg.slice(i * 6, i * 6 + 6)
             this.lists.push(list)
           }
-          console.log(this.lists)
         }
       })
       .catch(res => {
@@ -66,7 +65,7 @@ export default {
   }
   .children a {
     display: block;
-    padding: 18px 20px;
+    padding: 18px 0px 18px 20px;
     line-height: 40px;
     color: #333;
     -webkit-transition: color .2s;

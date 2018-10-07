@@ -11,17 +11,21 @@
           <ul class="nav-list">
             <li class="nav-category">
               <a href="#"></a>
-              <div class="site-category">
+              <div class="site-category" @mouseover="showChildrenList($event)" @mouseleave="hideChildrenList()">
                 <el-menu class="site-category-list"
                   text-color="#fff"
                   active-text-color="#fff"
                   @select="handleSelect"
                   background-color="rgba(0,0,0,0.6)">
-                  <el-menu-item v-for="(item, key) in menuList" :key="key" :index="key+''">
-                    <span class="title">{{item.title}}</span>
-                    <i class="iconfont icon-arrowright"></i>
-                  </el-menu-item>
-                  <ChildrenList></ChildrenList>
+                  <template v-for="(item, key, index) in menuList">
+                    <el-menu-item  :key="key" :index="index+''" >
+                      <span class="title">{{item.title}}</span>
+                      <i class="iconfont icon-arrowright"></i>
+                    </el-menu-item>
+                  </template>
+                  <template v-for="(index, key) in menuList.length">
+                    <ChildrenList :key="'101' + key" :cid="index" v-show="childrenIndex == index"></ChildrenList>
+                  </template>
                 </el-menu>
               </div>
             </li>
@@ -52,6 +56,7 @@ export default {
   data () {
     return {
       input: '',
+      childrenIndex: -1,
       navList: [
         {title: '小米手机', nav_url: '#'},
         {title: '红米', nav_url: '#'},
@@ -82,6 +87,28 @@ export default {
   methods: {
     handleSelect (index, indexPath) {
       console.log(index + ',' + indexPath)
+    },
+    showChildrenList (e) {
+      var $target = e.target
+      if ($target.className === 'el-menu-item') {
+        var $parent = $target.parentNode
+        var items = $parent.querySelectorAll('.el-menu-item')
+        for (var item of items) {
+          item.classList.remove('category-item-active')
+        }
+        $target.classList.add('category-item-active')
+        for (var i in items) {
+          if (items[i].classList.contains('category-item-active')) {
+            this.childrenIndex = parseInt(i) + 1
+            return
+          }
+        }
+      }
+    },
+    hideChildrenList () {
+      var item = document.querySelector('.el-menu-item.category-item-active')
+      item.classList.remove('category-item-active')
+      this.childrenIndex = -1
     }
   }
 }
